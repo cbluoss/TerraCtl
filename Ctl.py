@@ -195,7 +195,7 @@ def main():
         if now.tm_hour == (TIME_HIGH_NOON[0]+DURATION_HIGH_NOON) and now.tm_min == TIME_HIGH_NOON[1] and not ACTIVE_SEQUENCE:
             set_white(pcf, False)
 
-        if now.tm_hour == TIME_SUNSET[0] and now.tm_min == TIME_SUNSET[1] and not ACTIVE_SEQUENCE:
+        if ((now.tm_hour == TIME_SUNSET[0] and now.tm_min == TIME_SUNSET[1]) or (now.tm_hour < TIME_SUNRISE[0]))  and not ACTIVE_SEQUENCE:
             STRIP.fill((10,5,5))
             set_3v_psu(pcf, False)
 
