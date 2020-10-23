@@ -132,7 +132,7 @@ def set_daylight(pcf, strip):
     colorWipe(strip, Color(60,220,140), 10)
     set_full_spec(pcf, True)
 
-def boot_sequence(pcf, strip, duration= 5):
+def boot_sequence(pcf, duration= 5):
     print("boot sequence started")
     ACTIVE_SEQUENCE = True
     STATE_RELAIS = [True, True, True, True, True, True, True, True,True, True, True, True, True, True, True, True]
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     pcf = PCF8575(I2C_PORT, PCF_ADDR)
 
     STRIP = neopixel.NeoPixel(LED_PIN, LED_COUNT)
- 
-    boot_sequence(strip)
+
+    boot_sequence()
     # set default daylight
     set_daylight(pcf, strip)
