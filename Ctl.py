@@ -129,7 +129,7 @@ def set_full_spec(pcf, state=False):
 def set_daylight(pcf, strip):
     print("set daylight with 60,220,140 + full spec")
     # More or less white impression with the full spectrum leds on
-    colorWipe(strip, Color(60,220,140), 10)
+    STRIP.fill((60,220,140))
     set_full_spec(pcf, True)
 
 def boot_sequence(pcf, duration= 5):
@@ -149,6 +149,6 @@ if __name__ == "__main__":
 
     STRIP = neopixel.NeoPixel(LED_PIN, LED_COUNT)
 
-    boot_sequence()
+    boot_sequence(pcf)
     # set default daylight
     set_daylight(pcf, strip)
