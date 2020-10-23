@@ -190,6 +190,6 @@ def main():
             sunrise_sequence(pcf)
         # no reason for unnecessary cycles
         time.sleep(10)
-        
+
 if __name__ == "__main__":
     main()
