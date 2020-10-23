@@ -28,6 +28,23 @@ LED_BRIGHTNESS = 255     # Set to 0 for darkest and 255 for brightest
 LED_INVERT     = False   # True to invert the signal (when using NPN transistor level shift)
 LED_CHANNEL    = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
+#EVENT Times, Format (HOUR,MINUTES) (local time)
+TIME_SUNRISE = (6,20)
+TIME_SUNSET = (23,0)
+TIME_HIGH_NOON = (13,0)
+
+# Duration (in seconds)
+DURATION_HIGH_NOON = 60*60
+
+#Is there already an active sequence?
+ACTIVE_SEQUENCE = False
+
+STATE_3V = False
+STATE_W_LEFT = False
+STATE_W_RIGHT = False
+STATE_FULL_SPEC = False
+
+STATE_RELAIS = [True, True, True, True, True, True, True, True,True, True, True, True, True, True, True, True]
 # Define functions which animate LEDs in various ways.
 def colorWipe(strip, color, wait_ms=50):
     """Wipe color across display a pixel at a time."""
@@ -85,11 +102,71 @@ def theaterChaseRainbow(strip, wait_ms=50):
             for i in range(0, strip.numPixels(), 3):
                 strip.setPixelColor(i+q, 0)
 
-def boot_sequence(strip, duration= 10):
+def set_3v_psu(pcf, state=False):
+    # Libs behaves strangely. pcf.port[x] = True|False is quite unpredictable. Pushing the whole 16Element list works though
+    # [7] is the need relais
+    if state:
+        STATE_RELAIS[7] = False
+        pcf.port = STATE_RELAIS
+    else:
+        STATE_RELAIS[7] = True
+        pcf.port = STATE_RELAIS
+
+def set_white_left(pcf, state=False):
+    # Libs behaves strangely. pcf.port[x] = True|False is quite unpredictable. Pushing the whole 16Element list works though
+    # [6] is the need relais
+    if state:
+        set_3v_psu(pcf, True)
+        STATE_RELAIS[6] = False
+        pcf.port = STATE_RELAIS
+    else:
+        STATE_RELAIS[6] = True
+        pcf.port = STATE_RELAIS
+
+def set_white_right(pcf, state=False):
+    # Libs behaves strangely. pcf.port[x] = True|False is quite unpredictable. Pushing the whole 16Element list works though
+    # [5] is the need relais
+    if state:
+        set_3v_psu(pcf, True)
+        STATE_RELAIS[5] = False
+        pcf.port = STATE_RELAIS
+    else:
+        STATE_RELAIS[5] = True
+        pcf.port = STATE_RELAIS
+
+def set_white(pcf, state=False):
+    if state:
+        set_white_left(pcf,True)
+        set_white_right(pcf,True)
+    else:
+        set_white_left(pcf,False)
+        set_white_right(pcf,False)
+
+def set_full_spec(pcf, state=False):
+    # Libs behaves strangely. pcf.port[x] = True|False is quite unpredictable. Pushing the whole 16Element list works though
+    # [4] is the need relais
+    if state:
+        set_3v_psu(pcf, True)
+        STATE_RELAIS[4] = False
+        pcf.port = STATE_RELAIS
+    else:
+        STATE_RELAIS[4] = True
+        pcf.port = STATE_RELAIS
+
+def set_daylight(pcf, strip):
+    print("set daylight with 60,220,140 + full spec")
+    # More or less white impression with the full spectrum leds on
+    colorWipe(strip, Color(60,220,140), 10)
+    set_full_spec(pcf, True)
+
+def boot_sequence(strip, duration= 5):
     print("boot sequence started")
+    ACTIVE_SEQUENCE = True
     rainbow(strip)
     time.sleep((duration))
     colorWipe(strip, Color(0,0,0), 10)
+    time.sleep(5)
+    ACTIVE_SEQUENCE = False
 
 if __name__ == "__main__":
     # Initialize the IO-Expander
@@ -100,3 +177,5 @@ if __name__ == "__main__":
     strip.begin()
 
     boot_sequence(strip)
+    # set default daylight
+    set_daylight(pcf, strip)
