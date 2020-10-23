@@ -182,6 +182,8 @@ def main():
     STRIP = neopixel.NeoPixel(LED_PIN, LED_COUNT)
 
     boot_sequence(pcf)
+
+    sunrise_sequence(pcf)
     while True:
         now = time.localtime
 
