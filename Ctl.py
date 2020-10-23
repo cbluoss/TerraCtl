@@ -151,4 +151,4 @@ if __name__ == "__main__":
 
     boot_sequence(pcf)
     # set default daylight
-    set_daylight(pcf, strip)
+    set_daylight(pcf)
