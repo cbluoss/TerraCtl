@@ -77,11 +77,11 @@ def rainbow_cycle(wait):
 
 def fade(STRIP, start, end, seconds):
     # a,b = (r,g,b) tuples
-    r_diff = end[0] - start[0]
-    g_diff = end[1] - start[1]
-    b_diff = end[2] - start[2]
+    r_diff = abs(start[0]-end[0])
+    g_diff = abs(start[1]-end[1])
+    b_diff = abs(start[2]-end[2])
     # max steps needed to reach target color
-    max_diff = max(abs(r_diff),abs(g_diff),abs(b_diff))
+    max_diff = max(r_diff,g_diff,b_diff)
     step_duration = seconds/max_diff
     for i in range(0,max_diff):
         if i == 0:
@@ -89,15 +89,9 @@ def fade(STRIP, start, end, seconds):
             g = start[1]
             b = start[2]
         else:
-            r+= r_diff/max_diff*i
-            g+= g_diff/max_diff*i
-            b+= b_diff/max_diff*i
-            if r < 0:
-                r = 0
-            if g < 0:
-                g = 0
-            if b < 0:
-                b = 0
+            r= r_diff/max_diff*i
+            g = g_diff/max_diff*i
+            b = b_diff/max_diff*i
         STRIP.fill((r, g, b))
         time.sleep(step_duration)
 
@@ -159,11 +153,11 @@ def set_daylight(pcf, STRIP, color=(60,220,140)):
     STRIP.fill(color)
     set_full_spec(pcf, True)
 
-def sunrise_sequence(pcf, STRIP, duration=60*1):
+def sunrise_sequence(pcf, STRIP, duration=60*3):
     print("sunrise sequence started")
     ACTIVE_SEQUENCE = True
     fade(STRIP, (0,0,0), (255,60,10), duration)
-    fade(STRIP, (255,60,10), (60,220,140), duration)
+    #fade(STRIP, (255,60,10), (60,220,140), duration)
     set_daylight(pcf)
     ACTIVE_SEQUENCE = False
 
