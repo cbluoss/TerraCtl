@@ -175,7 +175,7 @@ def boot_sequence(pcf, duration= 5):
     time.sleep(duration)
     ACTIVE_SEQUENCE = False
 
-if __name__ == "__main__":
+def main():
     # Initialize the IO-Expander
     pcf = PCF8575(I2C_PORT, PCF_ADDR)
 
@@ -190,3 +190,6 @@ if __name__ == "__main__":
             sunrise_sequence(pcf)
         # no reason for unnecessary cycles
         time.sleep(10)
+        
+if __name__ == "__main__":
+    main()
