@@ -77,9 +77,9 @@ def rainbow_cycle(wait):
 
 def fade(STRIP, start, end, seconds):
     # a,b = (r,g,b) tuples
-    r_diff = start[0]-end[0]
-    g_diff = start[1]-end[1]
-    b_diff = start[2]-end[2]
+    r_diff = end[0] - start[0]
+    g_diff = end[1] - start[1]
+    b_diff = end[2] - start[2]
     # max steps needed to reach target color
     max_diff = max(abs(r_diff),abs(g_diff),abs(b_diff))
     step_duration = seconds/max_diff
