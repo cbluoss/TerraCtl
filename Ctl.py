@@ -77,11 +77,11 @@ def rainbow_cycle(wait):
 
 def fade(STRIP, start, end, seconds):
     # a,b = (r,g,b) tuples
-    r_diff = abs(start[0]-end[0])
-    g_diff = abs(start[1]-end[1])
-    b_diff = abs(start[2]-end[2])
+    r_diff = start[0]-end[0]
+    g_diff = start[1]-end[1]
+    b_diff = start[2]-end[2]
     # max steps needed to reach target color
-    max_diff = max(r_diff,g_diff,b_diff)
+    max_diff = max(abs(r_diff),abs(g_diff),abs(b_diff))
     step_duration = seconds/max_diff
     for i in range(0,max_diff):
         if i == 0:
@@ -147,7 +147,7 @@ def set_full_spec(pcf, state=False):
         STATE_RELAIS[4] = True
         pcf.port = STATE_RELAIS
 
-def set_daylight(pcf, color=(60,220,140)):
+def set_daylight(pcf, STRIP, color=(60,220,140)):
     print("set daylight with 60,220,140 + full spec")
     # More or less white impression with the full spectrum leds on
     STRIP.fill(color)
@@ -186,7 +186,7 @@ def main():
 
         if now.tm_hour == TIME_SUNRISE[0] and now.tm_min == TIME_SUNRISE[1] and not ACTIVE_SEQUENCE:
             # sunrise animation
-            sunrise_sequence(pcf)
+            sunrise_sequence(pcf, STRIP)
         # no reason for unnecessary cycles
         time.sleep(10)
 
