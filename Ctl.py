@@ -75,7 +75,7 @@ def rainbow_cycle(wait):
         pixels.show()
         time.sleep(wait)
 
-def fade(a, b, seconds):
+def fade(STRIP, a, b, seconds):
     # a,b = (r,g,b) tuples
     r_diff = abs(a[0]-b[0])
     g_diff = abs(a[1]-b[1])
@@ -156,15 +156,15 @@ def set_daylight(pcf, color=(60,220,140)):
     STRIP.fill(color)
     set_full_spec(pcf, True)
 
-def sunrise_sequence(pcf, duration=60*5):
+def sunrise_sequence(pcf, STRIP, duration=60*5):
     print("sunrise sequence started")
     ACTIVE_SEQUENCE = True
-    fade((0,0,0), (255,60,10), duration)
-    fade((255,60,10), (60,220,140), duration)
+    fade(STRIP, (0,0,0), (255,60,10), duration)
+    fade(STRIP, (255,60,10), (60,220,140), duration)
     set_daylight(pcf)
     ACTIVE_SEQUENCE = False
 
-def boot_sequence(pcf, duration= 5):
+def boot_sequence(pcf, STRIP, duration= 5):
     print("boot sequence started")
     ACTIVE_SEQUENCE = True
     STATE_RELAIS = [True, True, True, True, True, True, True, True,True, True, True, True, True, True, True, True]
@@ -181,9 +181,9 @@ def main():
 
     STRIP = neopixel.NeoPixel(LED_PIN, LED_COUNT)
 
-    boot_sequence(pcf)
+    boot_sequence(pcf, STRIP)
 
-    sunrise_sequence(pcf)
+    sunrise_sequence(pcf, STRIP)
     while True:
         now = time.localtime
 
