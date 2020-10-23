@@ -75,19 +75,19 @@ def rainbow_cycle(wait):
         pixels.show()
         time.sleep(wait)
 
-def fade(STRIP, a, b, seconds):
+def fade(STRIP, start, end, seconds):
     # a,b = (r,g,b) tuples
-    r_diff = abs(a[0]-b[0])
-    g_diff = abs(a[1]-b[1])
-    b_diff = abs(a[2]-b[2])
+    r_diff = abs(start[0]-end[0])
+    g_diff = abs(start[1]-end[1])
+    b_diff = abs(start[2]-end[2])
     # max steps needed to reach target color
     max_diff = max(r_diff,g_diff,b_diff)
     step_duration = seconds/max_diff
     for i in range(0,max_diff):
         if i == 0:
-            r = a[0]
-            g = a[1]
-            b = a[2]
+            r = start[0]
+            g = start[1]
+            b = start[2]
         else:
             if r < b[0]:
                 r+=1
@@ -156,7 +156,7 @@ def set_daylight(pcf, color=(60,220,140)):
     STRIP.fill(color)
     set_full_spec(pcf, True)
 
-def sunrise_sequence(pcf, STRIP, duration=60*5):
+def sunrise_sequence(pcf, STRIP, duration=60*1):
     print("sunrise sequence started")
     ACTIVE_SEQUENCE = True
     fade(STRIP, (0,0,0), (255,60,10), duration)
