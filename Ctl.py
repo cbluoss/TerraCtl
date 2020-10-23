@@ -148,9 +148,7 @@ if __name__ == "__main__":
     pcf = PCF8575(I2C_PORT, PCF_ADDR)
 
     STRIP = neopixel.NeoPixel(LED_PIN, LED_COUNT)
-    # Intialize the library (must be called once before other functions).
-    strip.begin()
-
+ 
     boot_sequence(strip)
     # set default daylight
     set_daylight(pcf, strip)
