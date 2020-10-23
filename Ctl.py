@@ -92,6 +92,12 @@ def fade(STRIP, start, end, seconds):
             r+= r_diff/max_diff*i
             g+= g_diff/max_diff*i
             b+= b_diff/max_diff*i
+            if r < 0:
+                r = 0
+            if g < 0:
+                g = 0
+            if b < 0:
+                b = 0
         STRIP.fill((r, g, b))
         time.sleep(step_duration)
 
