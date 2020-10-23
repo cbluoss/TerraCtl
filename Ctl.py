@@ -182,6 +182,7 @@ def main():
 
 
     while True:
+        print("begin main loop iteration")
         now = time.localtime()
 
         if now.tm_hour == TIME_SUNRISE[0] and now.tm_min == TIME_SUNRISE[1] and not ACTIVE_SEQUENCE:
