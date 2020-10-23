@@ -126,7 +126,7 @@ def set_full_spec(pcf, state=False):
         STATE_RELAIS[4] = True
         pcf.port = STATE_RELAIS
 
-def set_daylight(pcf, strip):
+def set_daylight(pcf):
     print("set daylight with 60,220,140 + full spec")
     # More or less white impression with the full spectrum leds on
     STRIP.fill((60,220,140))
