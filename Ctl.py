@@ -75,6 +75,30 @@ def rainbow_cycle(wait):
         pixels.show()
         time.sleep(wait)
 
+def fade(a, b, seconds):
+    # a,b = (r,g,b) tuples
+    r_diff = abs(a[0]-b[0])
+    g_diff = abs(a[1]-b[1])
+    b_diff = abs(a[2]-b[2])
+    # max steps needed to reach target color
+    max_diff = max(r_diff,g_diff,b_diff)
+    step_duration = seconds/max_diff
+    for i in range(0,max_diff):
+        if i == 0:
+            r = a[0]
+            g = a[1]
+            b = a[2]
+        else:
+            if r < b[0]:
+                r+=1
+            if g < b[1]:
+                g+=1
+            if b < b[1]:
+                b+=1
+        STRIP.fill((r, g, b))
+        time.sleep(step_duration)
+
+# Hardware-specific functions
 def set_3v_psu(pcf, state=False):
     # Libs behaves strangely. pcf.port[x] = True|False is quite unpredictable. Pushing the whole 16Element list works though
     # [7] is the need relais
@@ -126,11 +150,19 @@ def set_full_spec(pcf, state=False):
         STATE_RELAIS[4] = True
         pcf.port = STATE_RELAIS
 
-def set_daylight(pcf):
+def set_daylight(pcf, color=(60,220,140)):
     print("set daylight with 60,220,140 + full spec")
     # More or less white impression with the full spectrum leds on
-    STRIP.fill((60,220,140))
+    STRIP.fill(color)
     set_full_spec(pcf, True)
+
+def sunrise_sequence(pcf, duration=60*5):
+    print("sunrise sequence started")
+    ACTIVE_SEQUENCE = True
+    fade((0,0,0), (255,60,10), duration)
+    fade((255,60,10), (60,220,140), duration)
+    set_daylight(pcf)
+    ACTIVE_SEQUENCE = False
 
 def boot_sequence(pcf, duration= 5):
     print("boot sequence started")
@@ -150,5 +182,11 @@ if __name__ == "__main__":
     STRIP = neopixel.NeoPixel(LED_PIN, LED_COUNT)
 
     boot_sequence(pcf)
-    # set default daylight
-    set_daylight(pcf)
+    while True:
+        now = time.localtime
+
+        if now.tm_hour == TIME_SUNRISE[0] and now.tm_min == TIME_SUNRISE[1] and not ACTIVE_SEQUENCE:
+            # sunrise animation
+            sunrise_sequence(pcf)
+        # no reason for unnecessary cycles
+        time.sleep(10)
