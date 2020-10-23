@@ -30,8 +30,8 @@ TIME_SUNRISE = (6,20)
 TIME_SUNSET = (23,0)
 TIME_HIGH_NOON = (13,0)
 
-# Duration (in seconds)
-DURATION_HIGH_NOON = 60*60
+# Duration (in hours)
+DURATION_HIGH_NOON = 1
 
 #Is there already an active sequence?
 ACTIVE_SEQUENCE = False
@@ -158,7 +158,7 @@ def sunrise_sequence(pcf, STRIP, duration=60*3):
     ACTIVE_SEQUENCE = True
     fade(STRIP, (0,0,0), (255,60,10), duration)
     #fade(STRIP, (255,60,10), (60,220,140), duration)
-    set_daylight(pcf)
+    set_daylight(pcf, STRIP)
     ACTIVE_SEQUENCE = False
 
 def boot_sequence(pcf, STRIP, duration= 5):
@@ -168,7 +168,7 @@ def boot_sequence(pcf, STRIP, duration= 5):
     pcf.port = STATE_RELAIS
     STRIP[0] = (255, 0, 0)
     time.sleep((duration))
-    STRIP.fill((0, 0, 0))
+    STRIP.fill((10, 5, 5))
     time.sleep(duration)
     ACTIVE_SEQUENCE = False
 
@@ -180,13 +180,24 @@ def main():
 
     boot_sequence(pcf, STRIP)
 
-    sunrise_sequence(pcf, STRIP)
+
     while True:
         now = time.localtime
 
         if now.tm_hour == TIME_SUNRISE[0] and now.tm_min == TIME_SUNRISE[1] and not ACTIVE_SEQUENCE:
             # sunrise animation
             sunrise_sequence(pcf, STRIP)
+
+        if now.tm_hour == TIME_HIGH_NOON[0] and now.tm_min == TIME_HIGH_NOON[1] and not ACTIVE_SEQUENCE:
+            set_white(pcf, True)
+
+        if now.tm_hour == (TIME_HIGH_NOON[0]+DURATION_HIGH_NOON) and now.tm_min == TIME_HIGH_NOON[1] and not ACTIVE_SEQUENCE:
+            set_white(pcf, False)
+
+        if now.tm_hour == TIME_SUNSET[0] and now.tm_min == TIME_SUNSET[1] and not ACTIVE_SEQUENCE:
+            STRIP.fill((10,5,5))
+            set_3v_psu(pcf, False)
+
         # no reason for unnecessary cycles
         time.sleep(10)
 
