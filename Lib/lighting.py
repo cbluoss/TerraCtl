@@ -1,4 +1,4 @@
-from pcf8575 import PCF8575
+from .pcf8575 import PCF8575
 import board
 import neopixel
 import time
@@ -73,11 +73,11 @@ class PCF_Wrapper:
     def set_white(self, state=False):
         """Set state for all white LEDs"""
         if state:
-            set_white_left(pcf,True)
-            set_white_right(pcf,True)
+            self.set_white_left(True)
+            self.set_white_right(True)
         else:
-            set_white_left(pcf,False)
-            set_white_right(pcf,False)
+            self.set_white_left(False)
+            self.set_white_right(False)
 
     def set_full_spec(self, state=False):
         """Set state for the full spectrum LEDs"""
