@@ -108,17 +108,18 @@ class Lighting:
     def __init__(self, pcf_instance=PCF_Wrapper(), led_pin=LED_PIN, led_count=LED_COUNT):
         self.led_count = led_count
         self.pcf = pcf_instance
-        self.strip = neopixel.NeoPixel(led_pin, led_count)
+        self.strip = neopixel.NeoPixel(led_pin, led_count, auto_write=False)
 
         #enforce default state:
         self.default_state()
 
     def default_state(self):
         self.strip.fill((0,0,0))
+        self.strip.show()
         self.pcf.reset()
 
     # Effect functions, focused on the LED strip.
-    def effect_wheel(pos):
+    def effect_wheel(self, pos):
         # Input a value 0 to 255 to get a color value.
         # The colours are a transition r - g - b - back to r.
         if pos < 0 or pos > 255:
@@ -140,7 +141,7 @@ class Lighting:
         return (r, g, b) if ORDER in (neopixel.RGB, neopixel.GRB) else (r, g, b, 0)
 
 
-    def effect_rainbow_cycle(self,wait):
+    def effect_rainbow_cycle(self,wait=50):
         for j in range(255):
             for i in range(self.led_count):
                 pixel_index = (i * 256 // self.led_count) + j
