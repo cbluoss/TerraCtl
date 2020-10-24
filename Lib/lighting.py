@@ -2,6 +2,8 @@ from pcf8575 import PCF8575
 import board
 import neopixel
 import time
+from random import randint
+
 I2C_PORT = 1
 PCF_ADDR = 0x20
 
@@ -168,6 +170,17 @@ class Lighting:
             time.sleep(delay/1000)
 
     def effect_fade_out(self, delay=50, color=(255,60,10)):
-        for i in range(256,0,-1):
+        for i in range(255,0,-1):
             self.strip.fill((color[0]/255*i, color[1]/255*i, color[2]/255*i))
             time.sleep(delay/1000)
+
+    def effect_twinkle(self, color=(20,30,50), count=3, delay=50 ,duration=60*1000, bg_color=(0,0,0)):
+        self.strip.fill(bg_color)
+
+        for i in range(count):
+            pixel = randint(0,self.led_count)
+            self.strip[pixel] = color
+            time.sleep(delay/1000)
+
+        time.sleep(delay/1000)
+
