@@ -33,20 +33,19 @@ def event_sunrise(hw):
 
 def event_sunset(hw):
     logging.info("start sunset")
-    hw.effect_color_fade(color_from=(255,60,10), color_to=(5,5,5),  delay_ms=150, steps=512)
     try:
-        hw.pcf.set_socket("BLUE", False)
         hw.pcf.reset() #shut everything off
     except IOError:
         logging.debug("IO-Error")
         sleep(5)
         try:
-            hw.pcf.set_socket("BLUE", False)
             hw.pcf.reset() #shut everything off
         except IOError:
             pass
-    while datetime.now.day == NOW.day:
-        hw.effect_twinkle(color=(10,20,30), count=2, delay_ms=200 ,duration=60*1000, bg_color=(5,5,5))
+    hw.effect_color_fade(color_from=(255,60,10), color_to=(5,5,5),  delay_ms=150, steps=512)
+
+    while datetime.now().day == NOW.day:
+        hw.effect_twinkle(color=(40,40,50), count=1, delay_ms=750 ,duration=60*1000, bg_color=(5,5,5))
 
 def event_disable_fog(hw):
     logging.info("stop fog")
