@@ -59,7 +59,7 @@ class PCF_Wrapper:
             self.state[6] = True
             self.instance.port = self.state
 
-    def set_white_right(pcf, state=False):
+    def set_white_right(self, state=False):
         """Set state for right white LEDs"""
         if state:
             self.state[7] = False
@@ -70,7 +70,7 @@ class PCF_Wrapper:
             self.state[5] = True
             self.instance.port = self.state
 
-    def set_white(pcf, state=False):
+    def set_white(self, state=False):
         """Set state for all white LEDs"""
         if state:
             set_white_left(pcf,True)
@@ -79,7 +79,7 @@ class PCF_Wrapper:
             set_white_left(pcf,False)
             set_white_right(pcf,False)
 
-    def set_full_spec(pcf, state=False):
+    def set_full_spec(self, state=False):
         """Set state for the full spectrum LEDs"""
         if state:
             self.state[7] = False
@@ -105,7 +105,7 @@ class PCF_Wrapper:
             self.state[9] = not state
         self.instance.port = self.state
         
-class Lighting:
+class HW_Ctrl:
     """low level lighting controls, including the WS2812 strip as well as relais controlled high power leds"""
     def __init__(self, pcf_instance=PCF_Wrapper(), led_pin=LED_PIN, led_count=LED_COUNT):
         self.led_count = led_count
