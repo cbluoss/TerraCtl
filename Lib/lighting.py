@@ -145,13 +145,13 @@ class Lighting:
         return (r, g, b)
 
 
-    def effect_rainbow_cycle(self,delay=50):
+    def effect_rainbow_cycle(self,delay_ms=50):
         for j in range(255):
             for i in range(self.led_count):
                 pixel_index = (i * 256 // self.led_count) + j
                 self.strip[i] = self.effect_wheel(pixel_index & 255)
             self.strip.show()
-            time.sleep(delay/1000)
+            time.sleep(delay_ms/1000)
 
     def effect_boot(self, duration=5, color=(255,0,0)):
         self.strip.fill((0,0,0))
@@ -164,23 +164,43 @@ class Lighting:
         time.sleep(0.5)
         self.strip.fill((0,0,0))
 
-    def effect_fade_in(self, delay=50, color=(255,60,10)):
+    def effect_fade_in(self, delay_ms=50, color=(255,60,10)):
         for i in range(256):
             self.strip.fill((color[0]/255*i, color[1]/255*i, color[2]/255*i))
-            time.sleep(delay/1000)
+            time.sleep(delay_ms/1000)
 
-    def effect_fade_out(self, delay=50, color=(255,60,10)):
+    def effect_fade_out(self, delay_ms=50, color=(255,60,10)):
         for i in range(255,0,-1):
             self.strip.fill((color[0]/255*i, color[1]/255*i, color[2]/255*i))
-            time.sleep(delay/1000)
+            time.sleep(delay_ms/1000)
 
-    def effect_twinkle(self, color=(20,30,50), count=3, delay=50 ,duration=60*1000, bg_color=(0,0,0)):
+    def effect_twinkle(self, color=(20,30,50), count=3, delay_ms=50 ,duration=60*1000, bg_color=(0,0,0)):
         self.strip.fill(bg_color)
 
         for i in range(count):
             pixel = randint(0,self.led_count-1)
             self.strip[pixel] = color
-            time.sleep(delay/1000)
+            time.sleep(delay_ms/1000)
 
-        time.sleep(delay/1000)
+        time.sleep(delay_ms/1000)
 
+    def effect_sparkle(self, color=(20,30,50), delay_ms=20, bg_color=(0,0,0)):
+        pixel = randint(0,self.led_count-1)
+        self.strip[pixel] = color
+        time.sleep(delay_ms/1000)
+        self.strip[pixel] = bg_color
+
+    def effect_color_fade(self, color_from=(5,5,5), color_to=(255,60,10),  delay_ms=50, steps=255):
+        step_R = (colorTo[0] - colorFrom[0]) / steps
+        step_G = (colorTo[1] - colorFrom[1]) / steps
+        step_B = (colorTo[2] - colorFrom[2]) / steps
+        color_is = color_from
+
+        for x in range(steps):
+            c = color_is
+            self.fill(c)
+            time.sleep(delay_ms / 1000.0)
+            color_is[0] += step_R
+            color_is[1] += step_G
+            color_is[2] += step_B
+    
