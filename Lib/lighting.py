@@ -144,6 +144,6 @@ class Lighting:
         for j in range(255):
             for i in range(self.led_count):
                 pixel_index = (i * 256 // self.led_count) + j
-                self.strip[i] = self.effect_wheel(self.led_count & 255)
+                self.strip[i] = self.effect_wheel(pixel_index & 255)
             self.strip.show()
             time.sleep(wait)
