@@ -48,62 +48,62 @@ class PCF_Wrapper:
         self.state[7] = state
         self.instance.port = self.state
 
-def set_white_left(self, state=False):
-    """Set state for left white LEDs"""
-    if state:
-        self.state[7] = False
-        self.state[6] = False
-        self.instance.port = self.state
-    else:
-        # Be aware: PSU won't be powered off
-        self.state[6] = True
-        self.instance.port = self.state
+    def set_white_left(self, state=False):
+        """Set state for left white LEDs"""
+        if state:
+            self.state[7] = False
+            self.state[6] = False
+            self.instance.port = self.state
+        else:
+            # Be aware: PSU won't be powered off
+            self.state[6] = True
+            self.instance.port = self.state
 
-def set_white_right(pcf, state=False):
-    """Set state for right white LEDs"""
-    if state:
-        self.state[7] = False
-        self.state[5] = False
-        self.instance.port = self.state
-    else:
-        # Be aware: PSU won't be powered off
-        self.state[5] = True
-        self.instance.port = self.state
+    def set_white_right(pcf, state=False):
+        """Set state for right white LEDs"""
+        if state:
+            self.state[7] = False
+            self.state[5] = False
+            self.instance.port = self.state
+        else:
+            # Be aware: PSU won't be powered off
+            self.state[5] = True
+            self.instance.port = self.state
 
-def set_white(pcf, state=False):
-    """Set state for all white LEDs"""
-    if state:
-        set_white_left(pcf,True)
-        set_white_right(pcf,True)
-    else:
-        set_white_left(pcf,False)
-        set_white_right(pcf,False)
+    def set_white(pcf, state=False):
+        """Set state for all white LEDs"""
+        if state:
+            set_white_left(pcf,True)
+            set_white_right(pcf,True)
+        else:
+            set_white_left(pcf,False)
+            set_white_right(pcf,False)
 
-def set_full_spec(pcf, state=False):
-    """Set state for the full spectrum LEDs"""
-    if state:
-        self.state[7] = False
-        self.state[4] = False
-        self.instance.port = self.state
-    else:
-        # Be aware: PSU won't be powered off
-        self.state[4] = True
-        self.instance.port = self.state
+    def set_full_spec(pcf, state=False):
+        """Set state for the full spectrum LEDs"""
+        if state:
+            self.state[7] = False
+            self.state[4] = False
+            self.instance.port = self.state
+        else:
+            # Be aware: PSU won't be powered off
+            self.state[4] = True
+            self.instance.port = self.state
 
-def set_socket(self, socket, state=False):
-    if socket == "RED":
-        self.state[14] = not state
-        self.state[15] = not state
-    elif socket == "YELLOW":
-        self.state[12] = not state
-        self.state[13] = not state
-    elif socket == "BLUE":
-        self.state[10] = not state
-        self.state[11] = not state
-    elif socket == "GREEN":
-        self.state[8] = not state
-        self.state[9] = not state
-    self.instance.port = self.state
+    def set_socket(self, socket, state=False):
+        if socket == "RED":
+            self.state[14] = not state
+            self.state[15] = not state
+        elif socket == "YELLOW":
+            self.state[12] = not state
+            self.state[13] = not state
+        elif socket == "BLUE":
+            self.state[10] = not state
+            self.state[11] = not state
+        elif socket == "GREEN":
+            self.state[8] = not state
+            self.state[9] = not state
+        self.instance.port = self.state
         
 class Lighting:
     """low level lighting controls, including the WS2812 strip as well as relais controlled high power leds"""
@@ -178,7 +178,7 @@ class Lighting:
         self.strip.fill(bg_color)
 
         for i in range(count):
-            pixel = randint(0,self.led_count)
+            pixel = randint(0,self.led_count-1)
             self.strip[pixel] = color
             time.sleep(delay/1000)
 
