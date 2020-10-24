@@ -10,9 +10,9 @@ logging.basicConfig(level=logging.DEBUG)
 NOW = datetime.now()
 
 SUNRISE_AT = datetime(NOW.year, NOW.month, NOW.day, hour=6, minute=30)
-SUNSET_AT = datetime(NOW.year, NOW.month, NOW.day, hour=22, minute=0)
 FOG_STOP_AT = datetime(NOW.year, NOW.month, NOW.day, hour=7, minute=30)
 HIGHNOON_AT = datetime(NOW.year, NOW.month, NOW.day, hour=12, minute=30)
+SUNSET_AT = datetime(NOW.year, NOW.month, NOW.day, hour=22, minute=0)
 TRIGGER = IntervalTrigger(hours=24)
 
 def event_sunrise(hw):
@@ -50,7 +50,7 @@ def event_sunset(hw):
 
 def event_disable_fog(hw):
     logging.info("stop fog")
-    hw.strip.fill((20,60,10)) #compensation for the full spec leds
+    hw.strip.fill((0,240,20)) #compensation for the full spec leds
     try:
         hw.pcf.set_socket("GREEN", False)
         hw.pcf.set_full_spec(True)
