@@ -198,7 +198,7 @@ class Lighting:
 
         for x in range(steps):
             c = color_is
-            self.fill(c)
+            self.strip.fill(c)
             time.sleep(delay_ms / 1000.0)
             color_is[0] += step_R
             color_is[1] += step_G
