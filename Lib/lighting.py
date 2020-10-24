@@ -191,9 +191,9 @@ class Lighting:
         self.strip[pixel] = bg_color
 
     def effect_color_fade(self, color_from=(5,5,5), color_to=(255,60,10),  delay_ms=50, steps=255):
-        step_R = (colorTo[0] - colorFrom[0]) / steps
-        step_G = (colorTo[1] - colorFrom[1]) / steps
-        step_B = (colorTo[2] - colorFrom[2]) / steps
+        step_R = (color_to[0] - color_from[0]) / steps
+        step_G = (color_to[1] - color_from[1]) / steps
+        step_B = (color_to[2] - color_from[2]) / steps
         color_is = color_from
 
         for x in range(steps):
@@ -203,4 +203,3 @@ class Lighting:
             color_is[0] += step_R
             color_is[1] += step_G
             color_is[2] += step_B
-    
