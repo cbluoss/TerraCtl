@@ -143,13 +143,17 @@ class Lighting:
         return (r, g, b)
 
 
-    def effect_rainbow_cycle(self,delay=50/1000):
+    def effect_rainbow_cycle(self,delay=50):
         for j in range(255):
             for i in range(self.led_count):
                 pixel_index = (i * 256 // self.led_count) + j
                 self.strip[i] = self.effect_wheel(pixel_index & 255)
             self.strip.show()
-            time.sleep(delay)
+            time.sleep(delay/1000)
 
-    def effect_boot(self, delay=20):
-        pass
+    def effect_boot(self, duration=5):
+        self.strip.fill((0,0,0))
+        for i in range(self.led_count):
+            self.strip[i] = (255,0,0)
+            time.sleep(duration/self.led_count)
+    
