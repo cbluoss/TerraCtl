@@ -151,13 +151,23 @@ class Lighting:
             self.strip.show()
             time.sleep(delay/1000)
 
-    def effect_boot(self, duration=5):
+    def effect_boot(self, duration=5, color=(255,0,0)):
         self.strip.fill((0,0,0))
         for i in range(self.led_count):
-            self.strip[i] = (255,0,0)
+            self.strip[i] = color
             time.sleep((duration-1)/self.led_count)
         self.strip.fill((0,0,0))
-        time.sleep(0.5)
-        self.strip.fill((255,0,0))
+        time.sleep(0.2)
+        self.strip.fill(color)
         time.sleep(0.5)
         self.strip.fill((0,0,0))
+
+    def effect_fade_in(self, delay=50, color=(255,60,10)):
+        for i in range(256):
+            self.strip.fill((color[0]/255*i, color[1]/255*i, color[2]/255*i))
+            time.sleep(delay/1000)
+
+    def effect_fade_out(self, delay=50, color=(255,60,10)):
+        for i in range(256,0,-1):
+            self.strip.fill((color[0]/255*i, color[1]/255*i, color[2]/255*i))
+            time.sleep(delay/1000)
