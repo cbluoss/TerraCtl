@@ -109,6 +109,8 @@ class Lighting:
         self.led_count = led_count
         self.pcf = pcf_instance
         self.strip = neopixel.NeoPixel(led_pin, led_count)
+        self.strip = neopixel.NeoPixel(led_pin, led_count)
+        self.strip = neopixel.NeoPixel(led_pin, led_count)
 
         #enforce default state:
         self.default_state()
