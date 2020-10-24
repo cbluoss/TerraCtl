@@ -194,7 +194,7 @@ class Lighting:
         step_R = (color_to[0] - color_from[0]) / steps
         step_G = (color_to[1] - color_from[1]) / steps
         step_B = (color_to[2] - color_from[2]) / steps
-        color_is = color_from
+        color_is = list(color_from)
 
         for x in range(steps):
             c = color_is
