@@ -108,7 +108,7 @@ class Lighting:
     def __init__(self, pcf_instance=PCF_Wrapper(), led_pin=LED_PIN, led_count=LED_COUNT):
         self.led_count = led_count
         self.pcf = pcf_instance
-        self.strip = neopixel.NeoPixel(led_pin, led_count, auto_write=False)
+        self.strip = neopixel.NeoPixel(led_pin, led_count)
 
         #enforce default state:
         self.default_state()
