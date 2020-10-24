@@ -156,4 +156,8 @@ class Lighting:
         for i in range(self.led_count):
             self.strip[i] = (255,0,0)
             time.sleep(duration/self.led_count)
-    
+        self.strip.fill((0,0,0))
+        time.sleep(0.01)
+        self.strip.fill((255,0,0))
+        time.sleep(0.01)
+        self.strip.fill((0,0,0))
