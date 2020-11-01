@@ -26,6 +26,9 @@ class State(db.Model):
     def __repr__(self):
         return '<State at %r>' % self.date.isoformat()
 
-@app.route('/state/all')
+    def __dict__(self):
+        return {'id': self.id, 'date': self.date, 'state': json.load(self.state)}
+
+@app.route('/state/first')
 def ctrl_state():
-    return State.query.all()
+    return dict(State.query.first())
