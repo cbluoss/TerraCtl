@@ -29,10 +29,13 @@ class State(db.Model):
     def __repr__(self):
         return '<State at %r>' % self.date.isoformat()
 
+    @property
+    def state_dict(self):
+        return json.loads(self.state)
 class StateSchema(ma.Schema):
     class Meta:
         # Fields to expose
-        fields = ("id", "date", "state")
+        fields = ("id", "date", "state_dict")
 
 state_schema = StateSchema()
 states_schema = StateSchema(many=True)
