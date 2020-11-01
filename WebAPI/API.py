@@ -49,3 +49,14 @@ def ctrl_states():
 def ctrl_state_detail(id):
     state = State.query.get(id)
     return json.dumps(state_schema.dump(state))
+
+@app.route("/state/first")
+def ctrl_state_detail(id):
+    state = State.query.first()
+    return json.dumps(state_schema.dump(state))
+
+@app.route("/state/last")
+def ctrl_state_detail(id):
+    state = State.query.query.order_by('-id').first()
+    return json.dumps(state_schema.dump(state))
+
