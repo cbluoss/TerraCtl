@@ -9,6 +9,7 @@ from apscheduler.triggers.interval import IntervalTrigger
 ENABLE_DB = True
 
 if ENABLE_DB:
+    logging.info("db is enabled.")
     from db import SQLALCHEMY_DATABASE_URI
     from sqlalchemy import create_engine
     from sqlalchemy.ext.declarative import declarative_base
@@ -121,7 +122,10 @@ if __name__ == "__main__":
     logging.info(scheduler.print_jobs())
 
     while True:
-        state = State(state=HW.get_state())
-        db_session.add(state)
-        db_session.commit()
+        if ENABLE_DB:
+            logging.info("write state to db")
+            state = State(state=HW.get_state())
+            db_session.add(state)
+            db_session.commit()
+            logging.info("last logged state: ", db_session.query(State).last())
         sleep(60)
