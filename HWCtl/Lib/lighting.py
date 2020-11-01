@@ -38,13 +38,14 @@ class PCF_Wrapper:
 
     def get_state(self):
         result = {}
+        # Be aware that raw is still inverted
         result['raw'] = self.state
-        result['sockets'] = {'RED': self.state[14], 'YELLOW': self.state[12], 'BLUE': self.state[10], 'GREEN': self.state[8]}
-        result['3v'] = self.state[7]
+        result['sockets'] = {'RED': not self.state[14], 'YELLOW': not self.state[12], 'BLUE': not self.state[10], 'GREEN': not self.state[8]}
+        result['3v'] = not self.state[7]
         result['leds'] = {}
-        result['leds']['white_left'] = self.state[6] and self.state[7]
-        result['leds']['white_right'] = self.state[5] and self.state[7]
-        result['leds']['full_spec'] = self.state[4] and self.state[7]
+        result['leds']['white_left'] = not (self.state[6] and self.state[7])
+        result['leds']['white_right'] = not(self.state[5] and self.state[7])
+        result['leds']['full_spec'] = not(self.state[4] and self.state[7])
         return result
 
     def reset(self):

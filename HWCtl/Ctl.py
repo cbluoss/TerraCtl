@@ -124,7 +124,7 @@ if __name__ == "__main__":
     while True:
         if ENABLE_DB:
             logging.info("write state to db")
-            state = State(state=HW.get_state())
+            state = State(state=HW.get_state(), date=datetime.now())
             db_session.add(state)
             logging.info("session state: ", db_session.new)
             db_session.commit()
