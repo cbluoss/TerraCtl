@@ -36,6 +36,17 @@ class PCF_Wrapper:
         # all off!
         self.reset()
 
+    def get_state(self):
+        result = {}
+        result['raw'] = self.state
+        result['sockets'] = {'RED': self.state[14], 'YELLOW': self.state[12], 'BLUE': self.state[10], 'GREEN': self.state[8]}
+        result['3v'] = self.state[7]
+        result['leds'] = {}
+        result['leds']['white_left'] = self.state[6] and self.state[7]
+        result['leds']['white_right'] = self.state[5] and self.state[7]
+        result['leds']['full_spec'] = self.state[4] and self.state[7]
+        return result
+
     def reset(self):
         self.state = [True, True, True, True, True, True, True, True,True, True, True, True, True, True, True, True]
         self.instance.port = self.state
@@ -122,6 +133,10 @@ class HW_Ctrl:
         self.strip.fill((0,0,0))
         self.strip.show()
         self.pcf.reset()
+
+    def get_state(self):
+        # We don't have a known state for the neopixel/ws2812b strip anyways.
+        return self.pcf.get_state()
 
     # Effect functions, focused on the LED strip.
     def effect_wheel(self, pos):

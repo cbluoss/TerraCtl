@@ -1,11 +1,17 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from .db import SQLALCHEMY_DATABASE_URI
 import json
 
+DEBUG = True
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'connect_args':{'check_same_thread': False}}
+if DEBUG:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'connect_args':{'check_same_thread': False}}
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
+
 db = SQLAlchemy(app)
 
 

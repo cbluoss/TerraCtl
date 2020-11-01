@@ -1,6 +1,6 @@
 import logging
 from time import sleep
-from .Lib.lighting import HW_Ctrl
+from Lib.lighting import HW_Ctrl
 from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger

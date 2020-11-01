@@ -4,7 +4,9 @@ apscheduler
 smbus2
 SQLAlchemy
 adafruit-circuitpython-neopixel
+PyMySQL
 
 # WebAPI
 Flask
 Flask-SQLAlchemy
+PyMySQL
