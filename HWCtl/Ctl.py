@@ -126,6 +126,6 @@ if __name__ == "__main__":
             logging.info("write state to db")
             state = State(state=HW.get_state())
             db_session.add(state)
+            logging.info("session state: ", db_session.new)
             db_session.commit()
-            logging.info("last logged state: ", db_session.query(State).last())
         sleep(60)
