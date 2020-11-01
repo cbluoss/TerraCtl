@@ -5,6 +5,28 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
+ENABLE_DB = True
+
+if ENABLE_DB:
+    from db import SQLALCHEMY_DATABASE_URI
+    from sqlalchemy import create_engine
+    from sqlalchemy.ext.declarative import declarative_base
+    import sqlalchemy as db
+    engine = create_engine(SQLALCHEMY_DATABASE_URI)
+
+    Base = declarative_base()
+
+
+    class State(Base):
+        id = db.Column(db.Integer, primary_key=True)
+        date = db.Column(db.DateTime, default=datetime.now())
+        state = db.Column(db.Text, nullable=False)
+
+        def __init__(self, state={}, date=datetime.now()):
+            self.state = json.dumps(state)
+            self.date = date
+        def __repr__(self):
+            return '<State at %r>' % self.date.isoformat()
 
 logging.basicConfig(level=logging.DEBUG)
 NOW = datetime.now()
@@ -80,6 +102,9 @@ if __name__ == "__main__":
     logging.info("start main")
     scheduler = BackgroundScheduler()
     scheduler.start()
+    if ENABLE_DB:
+        Session = db.orm.sessionmaker(bind=engine)
+        db_session = Session()
 
     HW = HW_Ctrl()
 
@@ -94,4 +119,6 @@ if __name__ == "__main__":
     logging.info(scheduler.print_jobs())
 
     while True:
-        sleep(15)
+        state = State(state=HW.get_state())
+        db_session.add(state)
+        sleep(60)
