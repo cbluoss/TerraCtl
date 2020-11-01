@@ -2,6 +2,7 @@ from .pcf8575 import PCF8575
 import board
 import neopixel
 import time
+import math
 from random import randint
 
 I2C_PORT = 1
@@ -203,3 +204,22 @@ class HW_Ctrl:
             color_is[0] += step_R
             color_is[1] += step_G
             color_is[2] += step_B
+
+    def effect_sine_wave(self, color=(10,10,10), delay_ms=50,multi=5, cycles=1):
+        BASE_LEVEL = 10
+        strip = [color for x in range(0,self.led_count)]
+
+        for x in range(0,len(strip)):
+            step = 2*3.1415 / len(strip)
+            strip[x]  = (int(color[0]+(math.sin(step*x)*multi)),int(color[1]+(math.sin(step*x)*multi)),int(color[2]+(math.sin(step*x)*multi)))
+
+        def shift(list, n=1):
+            for i in range(n):
+                temp = list.pop()
+                list.insert(0, temp)
+
+        for n in range(0,self.led_count*cycles):
+            for i in range(self.led_count):
+                self.strip[i] = strip[i]
+            shift(strip, 1)
+            sleep(delay_ms/1000)

@@ -1,3 +1,10 @@
+# HWCtl
 rpi_ws281x
 apscheduler
 smbus2
+SQLAlchemy
+adafruit-circuitpython-neopixel
+
+# WebAPI
+Flask
+Flask-SQLAlchemy
