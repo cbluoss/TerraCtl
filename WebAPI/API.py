@@ -39,10 +39,10 @@ states_schema = StateSchema(many=True)
 
 @app.route('/state/all')
 def ctrl_states():
-    all_states = State.all()
+    all_states = State.query.all()
     return json.dumps(states_schema.dump(all_states))
 
 @app.route("/state/<id>")
 def ctrl_state_detail(id):
-    state = State.get(id)
+    state = State.query.get(id)
     return json.dumps(state_schema.dump(state))
