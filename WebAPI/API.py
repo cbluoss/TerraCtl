@@ -6,6 +6,8 @@ import json
 
 TEST_DB = False
 app = Flask(__name__)
+ma = Marshmallow(app)
+
 if TEST_DB:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'connect_args':{'check_same_thread': False}}
@@ -26,9 +28,20 @@ class State(db.Model):
     def __repr__(self):
         return '<State at %r>' % self.date.isoformat()
 
-    def __dict__(self):
-        return {'id': self.id, 'date': self.date, 'state': json.load(self.state)}
+class StateSchema(ma.Schema):
+    class Meta:
+        # Fields to expose
+        fields = ("id", "date", "state")
 
-@app.route('/state/first')
-def ctrl_state():
-    return dict(State.query.first())
+state_schema = StateSchema()
+states_schema = StateSchema(many=True)
+
+@app.route('/state/all')
+def ctrl_states():
+    all_states = State.all()
+    return states_schema.dump(all_states)
+
+@app.route("/state/<id>")
+def ctrl_state_detail(id):
+    state = State.get(id)
+    return state_schema.dump(state)

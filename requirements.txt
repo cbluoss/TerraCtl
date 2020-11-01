@@ -10,3 +10,4 @@ PyMySQL
 Flask
 Flask-SQLAlchemy
 PyMySQL
+flask-marshmallow
