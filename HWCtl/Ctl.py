@@ -123,4 +123,5 @@ if __name__ == "__main__":
     while True:
         state = State(state=HW.get_state())
         db_session.add(state)
+        db_session.commit()
         sleep(60)
