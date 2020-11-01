@@ -4,9 +4,9 @@ from datetime import datetime
 from db import SQLALCHEMY_DATABASE_URI
 import json
 
-DEBUG = True
+TEST_DB = False
 app = Flask(__name__)
-if DEBUG:
+if TEST_DB:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
     app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'connect_args':{'check_same_thread': False}}
 else:
@@ -25,3 +25,7 @@ class State(db.Model):
         self.date = date
     def __repr__(self):
         return '<State at %r>' % self.date.isoformat()
+
+@app.route('/state/all')
+def ctrl_state():
+    return State.query.all()
