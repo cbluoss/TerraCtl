@@ -18,6 +18,7 @@ if ENABLE_DB:
 
 
     class State(Base):
+        __tablename__ = 'state'
         id = db.Column(db.Integer, primary_key=True)
         date = db.Column(db.DateTime, default=datetime.now())
         state = db.Column(db.Text, nullable=False)
