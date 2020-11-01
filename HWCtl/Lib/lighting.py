@@ -205,7 +205,7 @@ class HW_Ctrl:
             color_is[1] += step_G
             color_is[2] += step_B
 
-    def effect_sine_wave(self, color=(5,5,5), delay_ms=100,multi=4, cycles=1, waves=2):
+    def effect_sine_wave(self, color=(5,5,5), delay_ms=100,multi=4, cycles=1, waves=2,smooth=True):
         BASE_LEVEL = 10
         strip = [color for x in range(0,self.led_count)]
 
@@ -220,6 +220,9 @@ class HW_Ctrl:
 
         for n in range(0,self.led_count*cycles):
             for i in range(self.led_count):
-                self.strip[i] = strip[i]
+                if not smooth:
+                    self.strip[i] = strip[i]
+                else:
+                    self.strip[i] = (strip[i]+strip[i-1])/2
             shift(strip, 1)
             time.sleep(delay_ms/1000)

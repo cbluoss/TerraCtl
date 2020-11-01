@@ -46,7 +46,7 @@ def event_sunset(hw):
 
     while datetime.now().hour < 5:
         # hw.effect_twinkle(color=(40,40,50), count=1, delay_ms=750 ,duration=60*1000, bg_color=(5,5,5))
-        hw.effect_sine_wave(color=(10,10,10), delay_ms=50,multi=5, cycles=1)
+        hw.effect_sine_wave(color=(0,0,0), delay_ms=300,multi=5, cycles=1)
 
 def event_disable_fog(hw):
     logging.info("stop fog")
