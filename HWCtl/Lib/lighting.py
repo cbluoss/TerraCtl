@@ -205,13 +205,13 @@ class HW_Ctrl:
             color_is[1] += step_G
             color_is[2] += step_B
 
-    def effect_sine_wave(self, color=(10,10,10), delay_ms=50,multi=5, cycles=1):
+    def effect_sine_wave(self, color=(5,5,5), delay_ms=100,multi=4, cycles=1, waves=2):
         BASE_LEVEL = 10
         strip = [color for x in range(0,self.led_count)]
 
         for x in range(0,len(strip)):
-            step = 2*3.1415 / len(strip)
-            strip[x]  = (int(color[0]+(math.sin(step*x)*multi)),int(color[1]+(math.sin(step*x)*multi)),int(color[2]+(math.sin(step*x)*multi)))
+            step = waves*2*3.1415 / len(strip)
+            strip[x]  = (max(0,int(color[0]+(math.sin(step*x)*multi))),max(0,int(color[1]+(math.sin(step*x)*multi))),max(0,int(color[2]+(math.sin(step*x)*multi))))
 
         def shift(list, n=1):
             for i in range(n):
