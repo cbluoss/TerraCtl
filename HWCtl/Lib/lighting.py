@@ -218,11 +218,14 @@ class HW_Ctrl:
                 temp = list.pop()
                 list.insert(0, temp)
 
+        def smooth(curr,prev):
+            return (curr[0]+prev[0])/2,(curr[1]+prev[1])/2,(curr[2]+prev[2])/2
+
         for n in range(0,self.led_count*cycles):
             for i in range(self.led_count):
                 if not smooth:
                     self.strip[i] = strip[i]
                 else:
-                    self.strip[i] = (strip[i]+strip[i-1])/2
+                    self.strip[i] = smooth(strip[i], strip[i-1])
             shift(strip, 1)
             time.sleep(delay_ms/1000)
