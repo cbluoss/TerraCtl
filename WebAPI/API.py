@@ -57,6 +57,6 @@ def ctrl_state_first():
 
 @app.route("/state/last")
 def ctrl_state_last():
-    state = State.query.query.order_by('-id').first()
+    state = State.query.order_by('-id').first()
     return json.dumps(state_schema.dump(state))
 
