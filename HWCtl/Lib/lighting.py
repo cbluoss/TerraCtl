@@ -222,4 +222,4 @@ class HW_Ctrl:
             for i in range(self.led_count):
                 self.strip[i] = strip[i]
             shift(strip, 1)
-            sleep(delay_ms/1000)
+            time.sleep(delay_ms/1000)
