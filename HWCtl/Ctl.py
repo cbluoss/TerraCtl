@@ -69,7 +69,7 @@ def event_sunset(hw):
             pass
     hw.effect_color_fade(color_from=(255,60,10), color_to=(5,5,5),  delay_ms=150, steps=512)
 
-    while datetime.now().hour < 5:
+    while 20 < datetime.now().hour or datetime.now().hour < 5:
         # hw.effect_twinkle(color=(40,40,50), count=1, delay_ms=750 ,duration=60*1000, bg_color=(5,5,5))
         hw.effect_sine_wave(color=(0,0,0), delay_ms=300,multi=5, cycles=1)
 
