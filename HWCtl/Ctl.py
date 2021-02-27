@@ -128,4 +128,5 @@ if __name__ == "__main__":
             db_session.add(state)
             logging.info("session state: ", db_session.new)
             db_session.commit()
+        HW.display.refresh_image(HW.get_DHT_values())
         sleep(60)

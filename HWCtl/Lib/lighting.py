@@ -1,15 +1,69 @@
 from .pcf8575 import PCF8575
+import Adafruit_DHT
 import board
 import neopixel
 import time
 import math
+import logging
 from random import randint
+from PIL import Image, ImageDraw, ImageFont
+from datetime import datetime
+import subprocess
 
 I2C_PORT = 1
 PCF_ADDR = 0x20
+DISPLAY_ADDR = 0x3c
+DHT_PINS = [5,6]
+DHT_TYPE = Adafruit_DHT.DHT22
 
 LED_COUNT      = 46      # Number of LED pixels.
 LED_PIN        = board.D18      # GPIO pin connected to the pixels (18 uses PWM!).
+
+
+class Display_Wrapper:
+    def __init__(self):
+        from board import SCL, SDA
+        import busio
+        import adafruit_ssd1306
+        self.i2c = busio.I2C(SCL, SDA)
+        self.display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
+
+        # Clear display.
+        self.display.fill(0)
+        self.display.show()
+
+        self.font = ImageFont.load_default()
+
+
+    def create_blank_image(self):
+        # Create blank image for drawing.
+        # Make sure to create image with mode '1' for 1-bit color.
+        self.image = Image.new("1", (self.display.width, self.display.height))
+        self.drawing = ImageDraw.Draw(image)
+        self.drawing.rectangle((0, 0, self.display.width, self.display.height), outline=0, fill=0)
+
+    def refresh_image(self, sensor_data=[]):
+        # First define some constants to allow easy resizing of shapes.
+        padding = -2
+        top = padding
+        bottom = height - padding
+        # Move left to right keeping track of the current x position for drawing shapes.
+        x = 0
+
+        self.create_blank_image()
+
+        cmd = "hostname -I | cut -d' ' -f1"
+        IP = subprocess.check_output(cmd, shell=True).decode("utf-8")
+        self.drawing.text((x, top + 0), "IP: " + IP, font=self.font, fill=255)
+
+        time = datetime.now().strftime("%H:%M")
+        self.drawing.text((x, top + 8), "Zeit: " + time, font=self.font, fill=255)
+
+        i = 16
+        for s in sensor_data:
+            self.drawing.text((x, top + i), "T: %s°C | H: %s%" % (s['temperature'], s['humidity']), font=self.font, fill=255)
+            i += 8
+
 
 class PCF_Wrapper:
     def __init__(self, i2c_port=I2C_PORT, pcf_addr=PCF_ADDR):
@@ -120,9 +174,10 @@ class PCF_Wrapper:
         
 class HW_Ctrl:
     """low level lighting controls, including the WS2812 strip as well as relais controlled high power leds"""
-    def __init__(self, pcf_instance=PCF_Wrapper(), led_pin=LED_PIN, led_count=LED_COUNT):
+    def __init__(self, pcf_instance=PCF_Wrapper(), led_pin=LED_PIN, led_count=LED_COUNT, display_instance=Display_Wrapper()):
         self.led_count = led_count
         self.pcf = pcf_instance
+        self.display = display_instance
         self.strip = neopixel.NeoPixel(led_pin, led_count)
         self.strip = neopixel.NeoPixel(led_pin, led_count)
         self.strip = neopixel.NeoPixel(led_pin, led_count)
@@ -245,3 +300,15 @@ class HW_Ctrl:
                     self.strip[i] = smooth(strip[i], strip[i-1])
             shift(strip, 1)
             time.sleep(delay_ms/1000)
+
+
+    def get_DHT_values(self):
+        result = []
+        for pin in DHT_PINS:
+            try:
+                values = Adafruit_DHT.read_retry(DHT_TYPE, pin)
+                result.append({'humidity': values[0], 'temperature': values[1]})
+            except:
+                logging.info("An error occured while reading the Sensor on Pin %s" % pin)
+        return result
+
