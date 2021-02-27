@@ -64,6 +64,9 @@ class Display_Wrapper:
             self.drawing.text((x, top + i), "T: %s°C | H: %s%%" % (s['temperature'], s['humidity']), font=self.font, fill=255)
             i += 8
 
+        self.display.image(self.image)
+        self.display.show()
+
 
 class PCF_Wrapper:
     def __init__(self, i2c_port=I2C_PORT, pcf_addr=PCF_ADDR):
