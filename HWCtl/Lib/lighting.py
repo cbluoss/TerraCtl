@@ -26,7 +26,7 @@ class Display_Wrapper:
         import busio
         import adafruit_ssd1306
         self.i2c = busio.I2C(SCL, SDA)
-        self.display = adafruit_ssd1306.SSD1306_I2C(128, 32, i2c)
+        self.display = adafruit_ssd1306.SSD1306_I2C(128, 32, self.i2c)
 
         # Clear display.
         self.display.fill(0)
@@ -39,7 +39,7 @@ class Display_Wrapper:
         # Create blank image for drawing.
         # Make sure to create image with mode '1' for 1-bit color.
         self.image = Image.new("1", (self.display.width, self.display.height))
-        self.drawing = ImageDraw.Draw(image)
+        self.drawing = ImageDraw.Draw(self.image)
         self.drawing.rectangle((0, 0, self.display.width, self.display.height), outline=0, fill=0)
 
     def refresh_image(self, sensor_data=[]):
