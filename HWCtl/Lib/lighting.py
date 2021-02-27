@@ -61,7 +61,7 @@ class Display_Wrapper:
 
         i = 16
         for s in sensor_data:
-            self.drawing.text((x, top + i), "T: %s°C | H: %s%" % (s['temperature'], s['humidity']), font=self.font, fill=255)
+            self.drawing.text((x, top + i), "T: %s°C | H: %s%%" % (s['temperature'], s['humidity']), font=self.font, fill=255)
             i += 8
 
 
