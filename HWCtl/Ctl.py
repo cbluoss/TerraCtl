@@ -75,7 +75,7 @@ def event_sunset(hw):
 
 def event_disable_fog(hw):
     logging.info("stop fog")
-    hw.strip.fill((0,240,20)) #compensation for the full spec leds
+    hw.strip.fill((0,0,0)) #compensation for the full spec leds not longer needed
     try:
         hw.pcf.set_socket("GREEN", False)
         hw.pcf.set_full_spec(True)
