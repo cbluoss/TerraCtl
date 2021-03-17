@@ -37,7 +37,7 @@ NOW = datetime.now()
 SUNRISE_AT = datetime(NOW.year, NOW.month, NOW.day, hour=6, minute=30)
 FOG_STOP_AT = datetime(NOW.year, NOW.month, NOW.day, hour=7, minute=30)
 HIGHNOON_AT = datetime(NOW.year, NOW.month, NOW.day, hour=12, minute=30)
-SUNSET_AT = datetime(NOW.year, NOW.month, NOW.day, hour=22, minute=0)
+SUNSET_AT = datetime(NOW.year, NOW.month, NOW.day, hour=20, minute=15)
 TRIGGER = IntervalTrigger(hours=24)
 
 def event_sunrise(hw):
@@ -67,7 +67,7 @@ def event_sunset(hw):
             hw.pcf.reset() #shut everything off
         except IOError:
             pass
-    hw.effect_color_fade(color_from=(255,60,10), color_to=(5,5,5),  delay_ms=150, steps=512)
+    hw.effect_color_fade(color_from=(255,60,10), color_to=(5,5,5),  delay_ms=4000, steps=512)
 
     while 20 < datetime.now().hour or datetime.now().hour < 5:
         # hw.effect_twinkle(color=(40,40,50), count=1, delay_ms=750 ,duration=60*1000, bg_color=(5,5,5))
