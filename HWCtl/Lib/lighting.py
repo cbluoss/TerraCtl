@@ -34,7 +34,7 @@ class WhiteLight():
         self.middle_strip = self.pca.channels[1]
         self.right_strip = self.pca.channels[2]
 
-        self.strips(self.left_strip, self.middle_strip, self.right_strip)
+        self.strips = [self.left_strip, self.middle_strip, self.right_strip]
 
     def set_all(self, brightness):
         # brightness from 0 to 1
