@@ -6,7 +6,7 @@ from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
-ENABLE_DB = True
+ENABLE_DB = False
 
 if ENABLE_DB:
     logging.info("db is enabled.")
@@ -34,7 +34,7 @@ if ENABLE_DB:
 logging.basicConfig(level=logging.DEBUG)
 NOW = datetime.now()
 
-SUNRISE_AT = datetime(NOW.year, NOW.month, NOW.day, hour=6, minute=30)
+SUNRISE_AT = datetime(NOW.year, NOW.month, NOW.day, hour=7, minute=0)
 FOG_STOP_AT = datetime(NOW.year, NOW.month, NOW.day, hour=7, minute=30)
 HIGHNOON_AT = datetime(NOW.year, NOW.month, NOW.day, hour=12, minute=30)
 SUNSET_AT = datetime(NOW.year, NOW.month, NOW.day, hour=20, minute=15)
@@ -43,21 +43,20 @@ TRIGGER = IntervalTrigger(hours=24)
 def event_sunrise(hw):
     logging.info("start sunrise")
     try:
-        hw.pcf.set_socket("BLUE", True) #Pump
-        hw.pcf.set_socket("GREEN", True) #Fog
+        hw.pcf.set_12v_psu(True)
     except IOError:
         logging.debug("IO-Error")
         sleep(5)
         try:
-            hw.pcf.set_socket("BLUE", True) #Pump
-            hw.pcf.set_socket("GREEN", True) #Fog
+            hw.pcf.set_12v_psu(True)
         except IOError:
             pass
-    hw.effect_color_fade(color_from=(5,5,5), color_to=(255,60,10),  delay_ms=250, steps=512)
-
+    #hw.effect_color_fade(color_from=(5,5,5), color_to=(255,60,10),  delay_ms=250, steps=512)
+    hw.white.effect_fade()
 
 def event_sunset(hw):
     logging.info("start sunset")
+    hw.white.effect_fade(fromBrightness=1.0, toBrightness=0.0)
     try:
         hw.pcf.reset() #shut everything off
     except IOError:
@@ -67,11 +66,12 @@ def event_sunset(hw):
             hw.pcf.reset() #shut everything off
         except IOError:
             pass
-    hw.effect_color_fade(color_from=(255,60,10), color_to=(5,5,5),  delay_ms=4000, steps=512)
+
 
     while 20 < datetime.now().hour or datetime.now().hour < 5:
         # hw.effect_twinkle(color=(40,40,50), count=1, delay_ms=750 ,duration=60*1000, bg_color=(5,5,5))
-        hw.effect_sine_wave(color=(0,0,0), delay_ms=300,multi=5, cycles=1)
+        # hw.effect_sine_wave(color=(0,0,0), delay_ms=300,multi=5, cycles=1)
+        pass
 
 def event_disable_fog(hw):
     logging.info("stop fog")
@@ -116,8 +116,8 @@ if __name__ == "__main__":
 
     scheduler.add_job(func=event_sunrise,trigger=TRIGGER, next_run_time=SUNRISE_AT, name="sunrise", args=[HW,])
     scheduler.add_job(func=event_sunset, trigger=TRIGGER, next_run_time=SUNSET_AT, name="sunset", args=[HW,])
-    scheduler.add_job(func=event_disable_fog, trigger=TRIGGER, next_run_time=FOG_STOP_AT, name="fog_stop", args=[HW,])
-    scheduler.add_job(func=event_high_noon, trigger=TRIGGER, next_run_time=HIGHNOON_AT, name="highnoon", args=[HW,])
+    # scheduler.add_job(func=event_disable_fog, trigger=TRIGGER, next_run_time=FOG_STOP_AT, name="fog_stop", args=[HW,])
+    # scheduler.add_job(func=event_high_noon, trigger=TRIGGER, next_run_time=HIGHNOON_AT, name="highnoon", args=[HW,])
 
     logging.info(scheduler.print_jobs())
 
@@ -128,5 +128,5 @@ if __name__ == "__main__":
             db_session.add(state)
             logging.info("session state: ", db_session.new)
             db_session.commit()
-        HW.display.refresh_image(HW.get_DHT_values())
+        HW.display.refresh_image(HW.get_DS1820_value())
         sleep(60)
