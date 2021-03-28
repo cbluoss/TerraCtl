@@ -5,7 +5,9 @@ smbus2
 SQLAlchemy
 adafruit-circuitpython-neopixel
 PyMySQL
-
+Adafruit_DHT
+Pillow
+adafruit-circuitpython-ssd1306
 # WebAPI
 Flask
 Flask-SQLAlchemy

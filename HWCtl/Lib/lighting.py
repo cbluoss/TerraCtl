@@ -16,7 +16,7 @@ DISPLAY_ADDR = 0x3c
 DHT_PINS = [5,6]
 DHT_TYPE = Adafruit_DHT.DHT22
 
-LED_COUNT      = 46      # Number of LED pixels.
+LED_COUNT      = 130      # Number of LED pixels.
 LED_PIN        = board.D18      # GPIO pin connected to the pixels (18 uses PWM!).
 
 
