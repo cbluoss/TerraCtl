@@ -16,7 +16,7 @@ DISPLAY_ADDR = 0x3c
 DHT_PINS = [5,6]
 DHT_TYPE = Adafruit_DHT.DHT22
 
-LED_COUNT      = 160      # Number of LED pixels.
+LED_COUNT      = 72      # Number of LED pixels.
 LED_PIN        = board.D18      # GPIO pin connected to the pixels (18 uses PWM!).
 
 
@@ -181,9 +181,7 @@ class HW_Ctrl:
         self.led_count = led_count
         self.pcf = pcf_instance
         self.display = display_instance
-        self.strip = neopixel.NeoPixel(led_pin, led_count)
-        self.strip = neopixel.NeoPixel(led_pin, led_count)
-        self.strip = neopixel.NeoPixel(led_pin, led_count)
+        self.strip = neopixel.NeoPixel(led_pin, led_count, pixel_order=neopixel.RGBW)
 
         #enforce default state:
         self.default_state()
