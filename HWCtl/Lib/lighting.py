@@ -43,7 +43,7 @@ class WhiteLight():
 
     def effect_fade(self, fromBrightness=0, toBrightness=1.0, delay_ms=50, steps=1000):
         step = (toBrightness - fromBrightness) / 1000
-        for i in range(step):
+        for i in range(steps):
             self.set_all(int(step*i))
             time.sleep(delay_ms/1000)
 
