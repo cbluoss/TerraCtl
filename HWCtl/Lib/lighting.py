@@ -16,7 +16,7 @@ DISPLAY_ADDR = 0x3c
 DHT_PINS = [5,6]
 DHT_TYPE = Adafruit_DHT.DHT22
 
-LED_COUNT      = 74      # Number of LED pixels.
+LED_COUNT      = 122      # Number of LED pixels.
 LED_PIN        = board.D18      # GPIO pin connected to the pixels (18 uses PWM!).
 
 
@@ -98,7 +98,7 @@ class PCF_Wrapper:
         # Be aware that raw is still inverted
         result['raw'] = self.state
         result['sockets'] = {'RED': not self.state[14], 'YELLOW': not self.state[12], 'BLUE': not self.state[10], 'GREEN': not self.state[8]}
-        result['3v'] = not self.state[7]
+        result['12v'] = not self.state[15]
         result['leds'] = {}
         result['leds']['white_left'] = not (self.state[6] and self.state[7])
         result['leds']['white_right'] = not(self.state[5] and self.state[7])
@@ -112,68 +112,68 @@ class PCF_Wrapper:
     def all_on(self):
         self.state = [False, False, False, False, False, False, False, False,False, False, False, False, False, False, False, False]
         self.instance.port = self.state
-    def set_3v_psu(self, state=True):
+    def set_12v_psu(self, state=True):
         """Set state for the 3.3v PSU"""
         # default is off
-        self.state[7] = state
+        self.state[15] = state
         self.instance.port = self.state
 
-    def set_white_left(self, state=False):
-        """Set state for left white LEDs"""
-        if state:
-            self.state[7] = False
-            self.state[6] = False
-            self.instance.port = self.state
-        else:
-            # Be aware: PSU won't be powered off
-            self.state[6] = True
-            self.instance.port = self.state
-
-    def set_white_right(self, state=False):
-        """Set state for right white LEDs"""
-        if state:
-            self.state[7] = False
-            self.state[5] = False
-            self.instance.port = self.state
-        else:
-            # Be aware: PSU won't be powered off
-            self.state[5] = True
-            self.instance.port = self.state
-
-    def set_white(self, state=False):
-        """Set state for all white LEDs"""
-        if state:
-            self.set_white_left(True)
-            self.set_white_right(True)
-        else:
-            self.set_white_left(False)
-            self.set_white_right(False)
-
-    def set_full_spec(self, state=False):
-        """Set state for the full spectrum LEDs"""
-        if state:
-            self.state[7] = False
-            self.state[4] = False
-            self.instance.port = self.state
-        else:
-            # Be aware: PSU won't be powered off
-            self.state[4] = True
-            self.instance.port = self.state
-
-    def set_socket(self, socket, state=False):
-        if socket == "RED":
-            self.state[14] = not state
-            self.state[15] = not state
-        elif socket == "YELLOW":
-            self.state[12] = not state
-            self.state[13] = not state
-        elif socket == "BLUE":
-            self.state[10] = not state
-            self.state[11] = not state
-        elif socket == "GREEN":
-            self.state[8] = not state
-            self.state[9] = not state
-        self.instance.port = self.state
+    # def set_white_left(self, state=False):
+    #     """Set state for left white LEDs"""
+    #     if state:
+    #         self.state[7] = False
+    #         self.state[6] = False
+    #         self.instance.port = self.state
+    #     else:
+    #         # Be aware: PSU won't be powered off
+    #         self.state[6] = True
+    #         self.instance.port = self.state
+    #
+    # def set_white_right(self, state=False):
+    #     """Set state for right white LEDs"""
+    #     if state:
+    #         self.state[7] = False
+    #         self.state[5] = False
+    #         self.instance.port = self.state
+    #     else:
+    #         # Be aware: PSU won't be powered off
+    #         self.state[5] = True
+    #         self.instance.port = self.state
+    #
+    # def set_white(self, state=False):
+    #     """Set state for all white LEDs"""
+    #     if state:
+    #         self.set_white_left(True)
+    #         self.set_white_right(True)
+    #     else:
+    #         self.set_white_left(False)
+    #         self.set_white_right(False)
+    #
+    # def set_full_spec(self, state=False):
+    #     """Set state for the full spectrum LEDs"""
+    #     if state:
+    #         self.state[7] = False
+    #         self.state[4] = False
+    #         self.instance.port = self.state
+    #     else:
+    #         # Be aware: PSU won't be powered off
+    #         self.state[4] = True
+    #         self.instance.port = self.state
+    #
+    # def set_socket(self, socket, state=False):
+    #     if socket == "RED":
+    #         self.state[14] = not state
+    #         self.state[15] = not state
+    #     elif socket == "YELLOW":
+    #         self.state[12] = not state
+    #         self.state[13] = not state
+    #     elif socket == "BLUE":
+    #         self.state[10] = not state
+    #         self.state[11] = not state
+    #     elif socket == "GREEN":
+    #         self.state[8] = not state
+    #         self.state[9] = not state
+    #     self.instance.port = self.state
         
 class HW_Ctrl:
     """low level lighting controls, including the WS2812 strip as well as relais controlled high power leds"""
