@@ -41,11 +41,11 @@ class WhiteLight():
         for i in self.strips:
             i.duty_cycle = int(brightness * self.MAX_BRIGHTNESS)
 
-    def effect_fade(self, fromBrightness=0, toBrightness=1.0, delay_ms=500, steps=100):
+    def effect_fade(self, fromBrightness=0, toBrightness=1.0, delay_ms=500, steps=256):
         step = (toBrightness - fromBrightness) / steps
         for i in range(steps):
             print(step, i, self.MAX_BRIGHTNESS, int(step*i*self.MAX_BRIGHTNESS))
-            self.set_all(int(fromBrightness + step*i))
+            self.set_all(step*i + fromBrightness)
             time.sleep(delay_ms/1000)
 
 class Display_Wrapper:
