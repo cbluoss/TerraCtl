@@ -129,5 +129,8 @@ if __name__ == "__main__":
             db_session.add(state)
             logging.info("session state: ", db_session.new)
             db_session.commit()
-        HW.display.refresh_image(HW.get_DS1820_value())
+        try:
+            HW.display.refresh_image(HW.get_DS1820_value())
+        except:
+            logging.info('Sensor not found')
         sleep(60)
