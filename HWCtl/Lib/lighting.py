@@ -1,6 +1,9 @@
 from .pcf8575 import PCF8575
 import Adafruit_DHT
 import board
+import busio
+import adafruit_pca9685
+import board
 import neopixel
 import time
 import math
@@ -19,6 +22,30 @@ DHT_TYPE = Adafruit_DHT.DHT22
 LED_COUNT      = 122      # Number of LED pixels.
 LED_PIN        = board.D18      # GPIO pin connected to the pixels (18 uses PWM!).
 
+
+class WhiteLight():
+    def __init__(self):
+        i2c = busio.I2C(board.SCL, board.SDA)
+        self.pca = adafruit_pca9685.PCA9685(i2c)
+        self.pca.frequency = 240
+        self.MAX_BRIGHTNESS = 0xffff
+
+        self.left_strip = self.pca.channels[0]
+        self.middle_strip = self.pca.channels[1]
+        self.right_strip = self.pca.channels[2]
+
+        self.strips(self.left_strip, self.middle_strip, self.right_strip)
+
+    def set_all(self, brightness):
+        # brightness from 0 to 1
+        for i in self.strips:
+            i.duty_cycle = int(brightness * self.MAX_BRIGHTNESS)
+
+    def effect_fade(self, fromBrightness=0, toBrightness=1.0, delay_ms=50, steps=1000):
+        step = (toBrightness - fromBrightness) / 1000
+        for i in range(step):
+            self.set_all(int(step*i))
+            time.sleep(delay_ms/1000)
 
 class Display_Wrapper:
     def __init__(self):
@@ -46,6 +73,7 @@ class Display_Wrapper:
         # First define some constants to allow easy resizing of shapes.
         padding = -2
         top = padding
+
         bottom = self.display.height - padding
         # Move left to right keeping track of the current x position for drawing shapes.
         x = 0
@@ -61,7 +89,10 @@ class Display_Wrapper:
 
         i = 16
         for s in sensor_data:
-            self.drawing.text((x, top + i), "T: %2.1f°C | H: %i%%" % (s['temperature'], s['humidity']), font=self.font, fill=255)
+            if 'humidity' in s:
+                self.drawing.text((x, top + i), "T: %2.1f°C | H: %i%%" % (s['temperature'], s['humidity']), font=self.font, fill=255)
+            else:
+                self.drawing.text((x, top + i), "T: %2.1f°C" % s['temperature'] , font=self.font, fill=255)
             i += 8
 
         self.display.image(self.image)
@@ -112,10 +143,10 @@ class PCF_Wrapper:
     def all_on(self):
         self.state = [False, False, False, False, False, False, False, False,False, False, False, False, False, False, False, False]
         self.instance.port = self.state
-    def set_12v_psu(self, state=True):
-        """Set state for the 3.3v PSU"""
+    def set_12v_psu(self, state=False):
+        """Set state for the 12v PSU"""
         # default is off
-        self.state[15] = state
+        self.state[15] = not state
         self.instance.port = self.state
 
     # def set_white_left(self, state=False):
@@ -176,12 +207,13 @@ class PCF_Wrapper:
     #     self.instance.port = self.state
         
 class HW_Ctrl:
-    """low level lighting controls, including the WS2812 strip as well as relais controlled high power leds"""
+    """low level lighting controls, including the WS2812 strip as well as relais/pwm controlled high power leds"""
     def __init__(self, pcf_instance=PCF_Wrapper(), led_pin=LED_PIN, led_count=LED_COUNT, display_instance=Display_Wrapper()):
         self.led_count = led_count
         self.pcf = pcf_instance
         self.display = display_instance
         self.strip = neopixel.NeoPixel(led_pin, led_count, pixel_order=neopixel.GRBW)
+        self.white = WhiteLight()
 
         #enforce default state:
         self.default_state()
@@ -313,3 +345,9 @@ class HW_Ctrl:
                 logging.info("An error occured while reading the Sensor on Pin %s" % pin)
         return result
 
+    def get_DS1820_value(self):
+        ds1820_path = '/sys/bus/w1/devices/28-3c01d075d0b4/temperature'
+        with open(ds1820_path) as file:
+            raw = file.readline()
+            temp = int(raw) / 1000.0
+        return [{'temperature': temp}]
