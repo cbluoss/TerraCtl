@@ -45,7 +45,7 @@ class WhiteLight():
         step = (toBrightness - fromBrightness) / steps
         for i in range(steps):
             print(step, i, self.MAX_BRIGHTNESS, int(step*i*self.MAX_BRIGHTNESS))
-            self.set_all(int(fromBrightness*self.MAX_BRIGHTNESS + step*i*self.MAX_BRIGHTNESS))
+            self.set_all(int(fromBrightness + step*i))
             time.sleep(delay_ms/1000)
 
 class Display_Wrapper:
