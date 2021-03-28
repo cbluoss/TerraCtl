@@ -112,7 +112,8 @@ if __name__ == "__main__":
     HW = HW_Ctrl()
 
     #Set some basic light. Normal lighting starts with the first event.
-    HW.strip.fill((110,100,100))
+    HW.pcf.set_12v_psu(True)
+    HW.white.set_all(0.5)
 
     scheduler.add_job(func=event_sunrise,trigger=TRIGGER, next_run_time=SUNRISE_AT, name="sunrise", args=[HW,])
     scheduler.add_job(func=event_sunset, trigger=TRIGGER, next_run_time=SUNSET_AT, name="sunset", args=[HW,])
