@@ -280,7 +280,7 @@ class HW_Ctrl:
             self.strip.fill((color[0]/255*i, color[1]/255*i, color[2]/255*i))
             time.sleep(delay_ms/1000)
 
-    def effect_twinkle(self, color=(20,30,50), count=3, delay_ms=50 ,duration=60*1000, bg_color=(0,0,0)):
+    def effect_twinkle(self, color=(0,0,5,10), count=3, delay_ms=20 ,duration=60*1000, bg_color=(0,0,0,0)):
         self.strip.fill(bg_color)
 
         for i in range(count):
@@ -290,7 +290,7 @@ class HW_Ctrl:
 
         time.sleep(delay_ms/1000)
 
-    def effect_sparkle(self, color=(20,30,50), delay_ms=20, bg_color=(0,0,0)):
+    def effect_sparkle(self, color=(20,30,50,0), delay_ms=20, bg_color=(0,0,0,0)):
         pixel = randint(0,self.led_count-1)
         self.strip[pixel] = color
         time.sleep(delay_ms/1000)
